@@ -1,9 +1,9 @@
 # NFS Ganesha
-A user mode nfs server implemented in a container with some baked-in configuration specific to the OSiRIS project (http://www.osris.org).  Designed for serving CephFS and RGW exports with KRB5 auth and idmap config using UMICH_LDAP backend.
+A user mode nfs server implemented in a container with configuration specific to serving CephFS exports with KRB5 auth and idmap config using UMICH_LDAP backend.   Adapted for the OSiRIS project (http://www.osris.org) funded by NSF grant [1541335](http://www.nsf.gov/awardsearch/showAward?AWD_ID=1541335&HistoricalAwards=false).
 
-Within the scope of this container's intended use many settings are set with environment variables that use defaults reasonable for the OSiRIS project but can be over-ridden as needed.  It is not meant to be suitable for serving configurations that do not use Ceph + NFVSv4 + KRB5 + Idmap/LDAP but it could be configured to your specific environment within those constraints.   
+The config is somehwat baked in to support the intended use many settings are done with environment variables that can be over-ridden as needed.  It should be possible to use this container without Kerberos security by setting a different GANESHA_SECTYPE docker env, enable NFSv3, etc.  None of these alternate usage scenarios are tested.   
 
-This container includes a CA cert specific to OSiRIS referenced for ldaps connections.  Depending on how your ldap server certificate is signed you may need to modify this container to include your CA cert.  Well-known public CA should work without modification.
+Depending on how your ldap server certificate is signed you may need to modify this container to include your CA cert.  Well-known public CA should work without modification.
 
 ## KRB5 config
 
@@ -83,10 +83,8 @@ Environment variables are shown below with defaults.
 * `GANESHA_LOGFILE`: "/dev/stdout"
 * `GANESHA_CONFIGFILE`: "/etc/ganesha/ganesha.conf"
 * `GANESHA_OPTIONS`: "-N NIV_EVENT" 
-* `GANESHA_EPOCH`: ""
 * `GANESHA_EXPORT_ID`: "2046"
 * `GANESHA_EXPORT`: "/"
-* `GANESHA_ACCESS`: "*"
 * `GANESHA_ROOT_ACCESS`: "*"
 * `GANESHA_NFS_PROTOCOLS`: "4"
 * `GANESHA_TRANSPORTS`: "TCP"
@@ -106,11 +104,11 @@ The path restriction is not required if you wish to serve your entire FS.  In th
 * `CEPH_FS_PATH`: "/"
 
 ### NFS IDMAP Environment Variables
-* `IDMAP_DOMAIN`: "osris.org"
-* `IDMAP_LDAP_SERVER`: "ldap"
+* `IDMAP_DOMAIN`: "$(hostname -d)"
+* `IDMAP_LDAP_SERVER`: "ldap.example.org"
 * `IDMAP_LDAP_SSL`: "true"
 * `IDMAP_LDAP_SSL_CA`: "/etc/ssl/certs/ca-certificates.crt"
-* `IDMAP_LDAP_BASE`: dc=osris,dc=org
+* `IDMAP_LDAP_BASE`: dc=example,dc=org
 * `IDMAP_LDAP_PEOPLE_BASE`: ou=NFSPeople,${IDMAP_LDAP_BASE}
 * `IDMAP_LDAP_GROUP_BASE`: ou=NFSPeople,${IDMAP_LDAP_BASE}
 

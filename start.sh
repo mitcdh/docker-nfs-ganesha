@@ -19,11 +19,11 @@ set -e
 : ${CEPH_FS_PATH:="/"}
 
 # nfs config requirements
-: ${IDMAP_DOMAIN:="osris.org"}
-: ${IDMAP_LDAP_SERVER:="ldap"}
+: ${IDMAP_DOMAIN:="$(hostname -d)"}
+: ${IDMAP_LDAP_SERVER:="ldap.example.org"}
 : ${IDMAP_LDAP_SSL:="true"}
 : ${IDMAP_LDAP_SSL_CA:="/etc/ssl/certs/ca-certificates.crt"}
-: ${IDMAP_LDAP_BASE="dc=osris,dc=org"}
+: ${IDMAP_LDAP_BASE="dc=example,dc=org"}
 : ${IDMAP_LDAP_PEOPLE_BASE="ou=NFSPeople,${IDMAP_LDAP_BASE}"}
 : ${IDMAP_LDAP_GROUP_BASE="ou=NFSGroups,${IDMAP_LDAP_BASE}"}
 
@@ -137,7 +137,7 @@ function bootstrap_idmap_config {
 Domain = ${IDMAP_DOMAIN}
 
 [Translation]
-Method = umich_ldap,nsswitch
+Method = umich_ldap, nsswitch
 
 [UMICH_SCHEMA]
 LDAP_server = ${IDMAP_LDAP_SERVER}

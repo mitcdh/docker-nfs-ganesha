@@ -80,10 +80,11 @@ EXPORT
 }
 
 LOG {
-        # Default_Log_Level = WARN;
-        # Components {
+        Default_Log_Level = WARN;
+        Components {
                 # ALL = DEBUG;
-        # }
+                # SESSIONS = INFO;
+         }
 }
 
 END

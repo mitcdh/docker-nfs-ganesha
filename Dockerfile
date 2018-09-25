@@ -1,14 +1,12 @@
 FROM ubuntu:xenial
-MAINTAINER Mitchell Hewes <me@mitcdh.com>
+MAINTAINER Ben Meekhof <bmeekhof@umich.edu>
 
 # install prerequisites
 RUN DEBIAN_FRONTEND=noninteractive \
- && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3FE869A9 \
- && echo "deb http://ppa.launchpad.net/gluster/nfs-ganesha/ubuntu xenial main" > /etc/apt/sources.list.d/nfs-ganesha-2.5.list \
- && echo "deb http://ppa.launchpad.net/gluster/libntirpc/ubuntu xenial main" > /etc/apt/sources.list.d/libntirpc-1.5.list \
- && echo "deb http://ppa.launchpad.net/gluster/glusterfs-3.11/ubuntu xenial main" > /etc/apt/sources.list.d/glusterfs-3.11.list \
+ && echo "deb http://download.ceph.com/nfs-ganesha/deb-V2.6-stable/mimic xenial main" > /etc/apt/sources.list.d/nfs-ganesha-2.6.list \ 
+ && echo "deb http://download.ceph.com/debian-mimic xenial main" > /etc/apt/sources.list.d/ceph-mimic.list \
  && apt-get update \
- && apt-get install -y netbase nfs-common dbus nfs-ganesha nfs-ganesha-fsal glusterfs-common \
+ && apt-get install -y --allow-unauthenticated sssd libnss-sss netbase krb5-user nfs-common libnfsidmap2 dbus libcephfs2 nfs-ganesha nfs-ganesha-ceph nfs-ganesha-rgw libntirpc1 \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
  && mkdir -p /run/rpcbind /export /var/run/dbus \
